@@ -190,28 +190,33 @@ button[type=submit]:hover {
 		</script>
 		
 	<script type="text/javascript">
-	$("button").click(function() {
-
-	         var name = $('#name').val();
-	       var email = $('#email').val();
-	       var msg = $('#message').val();
-	       $.get("https://rgssendmail.azurewebsites.net/api/SendMail?code=09fOFdbcgq9hKG0XqdCpkCsiSXTCjUXkM37uSAiVjPPI3LUkk3oozA==&email="+email+"&name="+name+"&msg="+msg, 
-	    		   function(data, status){
-	    	   console.log('Called API');
-	       })
-	       .done(function(){
-	    	   console.log('Mail Sent');
-	       })
-	       .fail(function(){
-	    	   console.log('Error while sending mail');
-		   })
-	   $('#success_msg').css({
-			   
-			   'visibility':'visible'
-			   
-		   })
-
+$("#submitbtn").click(function() {	
+	var name = $('#name').val();
+	var email = $('#email').val();
+	var msg = $('#message').val();
+	if (name.replace(/\s/g, '') == "" || email.replace(/\s/g, '') == "" || msg.replace(/\s/g, '') == "" ) 
+	return;
+	$.ajax({
+	url: "https://rgssendmail.azurewebsites.net/api/SendMail?code=09fOFdbcgq9hKG0XqdCpkCsiSXTCjUXkM37uSAiVjPPI3LUkk3oozA==&email="+email+"&name="+name+"&msg="+msg,
+	dataType: 'text',
+	type: 'GET',
+	async: true,
+	statusCode: {
+	404: function (response) {
+	//alert(404);
+	return;
+	},
+	200: function (response) {
+	$('#success_msg').css({'visibility':'visible'});
+	}
+	},
+	error: function (jqXHR, status, errorThrown) {
+	alert(errorThrown);
+	$('#success_msg').css({'visibility':'visible'});
+	}
 	});
+	});
+
 	
 	</script>
 	</body>
