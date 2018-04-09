@@ -195,13 +195,12 @@ $("#submitbtn").click(function() {
 	var name = $('#name').val();
 	var email = $('#email').val();
 	var msg = $('#message').val();
-	if (name.replace(/\s/g, '') == "" || email.replace(/\s/g, '') == "" || msg.replace(/\s/g, '') == "" ) 
-	return;
 	if(name=="" || email=="" || msg==""){
 	$('#fail_msg').css({'visibility':'visible'});
-	
 	}
 	else{
+	if (name.replace(/\s/g, '') == "" || email.replace(/\s/g, '') == "" || msg.replace(/\s/g, '') == "" ) 
+	return;
 	$.ajax({
 	url: "https://rgssendmail.azurewebsites.net/api/SendMail?code=09fOFdbcgq9hKG0XqdCpkCsiSXTCjUXkM37uSAiVjPPI3LUkk3oozA==&email="+email+"&name="+name+"&msg="+msg,
 	dataType: 'text',
