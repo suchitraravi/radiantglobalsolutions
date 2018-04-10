@@ -216,6 +216,9 @@ $("#submitbtn").click(function() {
 		200: function (response) {
 		$('#msg').text("Thank you. We will get back to you shortly.");
 		$('#msg').css({'visibility':'visible','color':'#70ba1e'});
+		document.getElementById('name').value = "";
+		document.getElementById('email').value = "";
+		document.getElementById('message').value = "";
 		}
 		},
 		error: function (jqXHR, status, errorThrown) {
@@ -231,9 +234,7 @@ $("#submitbtn").click(function() {
 	else{
 	$('#msg').text("Please enter a valid email id");
 	$('#msg').css({'visibility':'visible','color':'#ff4525'});
-	document.getElementById('name').value = "";
-	document.getElementById('email').value = "";
-	document.getElementById('message').value = "";
+
 	}
 		      
 	});
