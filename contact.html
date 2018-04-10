@@ -145,6 +145,7 @@ button[type=submit]:hover {
    <button type="submit" id="submitbtn" >Submit</button>
 	<p id="success_msg" style="color: #70ba1e; visibility: hidden">Thank you. We'll get back to you shortly.</p>
 	<p id="fail_msg" style="color: #ff4525; visibility: hidden">Please fill the form properly.</p>
+	<p id="fail_mail_msg" style="color: #ff4525; visibility: hidden">Please enter a valid mail id.</p>
 </div>
 </div>
 
@@ -192,6 +193,7 @@ button[type=submit]:hover {
 		
 	<script type="text/javascript">
 $("#submitbtn").click(function() {	
+	var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 	var name = $('#name').val();
 	var email = $('#email').val();
 	var msg = $('#message').val();
@@ -199,29 +201,37 @@ $("#submitbtn").click(function() {
 	$('#fail_msg').css({'visibility':'visible'});
 	$('#success_msg').css({'visibility':'hidden'});
 	}
-	else{
-	if (name.replace(/\s/g, '') == "" || email.replace(/\s/g, '') == "" || msg.replace(/\s/g, '') == "" ) 
-	return;
-	$.ajax({
-	url: "https://rgssendmail.azurewebsites.net/api/SendMail?code=09fOFdbcgq9hKG0XqdCpkCsiSXTCjUXkM37uSAiVjPPI3LUkk3oozA==&email="+email+"&name="+name+"&msg="+msg,
-	dataType: 'text',
-	type: 'GET',
-	async: true,
-	statusCode: {
-	404: function (response) {
-	//alert(404);
-	return;
-	},
-	200: function (response) {
-	$('#success_msg').css({'visibility':'visible'});
+	else if(email.match(mailformat)){
+		if (name.replace(/\s/g, '') == "" || email.replace(/\s/g, '') == "" || msg.replace(/\s/g, '') == "" ) 
+		return;
+		$.ajax({
+		url: "https://rgssendmail.azurewebsites.net/api/SendMail?code=09fOFdbcgq9hKG0XqdCpkCsiSXTCjUXkM37uSAiVjPPI3LUkk3oozA==&email="+email+"&name="+name+"&msg="+msg,
+		dataType: 'text',
+		type: 'GET',
+		async: true,
+		statusCode: {
+		404: function (response) {
+		//alert(404);
+		return;
+		},
+		200: function (response) {
+		$('#success_msg').css({'visibility':'visible'});
+		}
+		},
+		error: function (jqXHR, status, errorThrown) {
+		$('#success_msg').css({'visibility':'visible'});
+		$('#fail_msg').css({'visibility':'hidden'});
+		$('#fail_mail_msg').css({'visibility':'hidden'});
+		}
+		});
+		}
 	}
-	},
-	error: function (jqXHR, status, errorThrown) {
-	$('#success_msg').css({'visibility':'visible'});
+	else{
+	$('#fail_mail_msg').css({'visibility':'visible'});
+	$('#success_msg').css({'visibility':'hidden'});
 	$('#fail_msg').css({'visibility':'hidden'});
 	}
-	});
-	}
+		      
 	});
 	
 	
